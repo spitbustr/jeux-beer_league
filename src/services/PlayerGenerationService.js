@@ -1,6 +1,6 @@
 import firstNames from "@/data/names"
 import lastNames from "@/data/lastNames"
-import PlayerCard from "@/models/PlayerCard"
+import Player from "@/models/Player"
 function getRandomStat() {
   const roll = Math.random()
   if (roll < 0.1) return 1
@@ -25,7 +25,7 @@ function getRandomDuoStat() {
 
 function getRandomBigStat() {
   // Bias towards middle of 1–50
-  return Math.floor((Math.random() + Math.random()) / 2 * 50) + 1
+  return Math.floor(Math.random() * 50)
 }
 
 function calculateAcquireCost(avgStat) {
@@ -37,8 +37,8 @@ function calculateAcquireCost(avgStat) {
   }
 }
 
-export default class PlayerService {
-  static generatePlayersList(count = 200) {
+export default class PlayerGenerationService {
+  static generatePlayersList(count = 300) {
     const availableFirstNames = [...firstNames]
     const availableLastNames = [...lastNames]
     const players = []
@@ -76,7 +76,7 @@ export default class PlayerService {
 
       const acquire = calculateAcquireCost(position === "G" ? avgGoalieStats : avgStat)
 
-      return new PlayerCard({
+      return new Player({
         id,
         info: {
           name: `${firstName} ${lastName}`,
@@ -99,7 +99,7 @@ export default class PlayerService {
       players.push(createPlayer(defenseCount + i, 'F'))
     }
     // Generate Forward players
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 40; i++) {
       players.push(createPlayer(defenseCount + forwardCount + i, 'G'))
     }
 

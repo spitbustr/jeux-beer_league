@@ -1,94 +1,67 @@
 <template>
-  <div>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Position</th>
-          <th>INT</th>
-          <th>SKL</th>
-          <th>SPD</th>
-          <th>SHT</th>
-          <th>PAS</th>
-          <th>DEX</th>
-          <th>FO</th>
-          <th>AGG</th>
-          <th>Beer</th>
-          <th>Charm</th>
-          <th>Money</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="player in playersList" :key="player.id">
-          <td>{{ player.info.name }}</td>
-          <td>{{ player.info.position }}</td>
-          <td>{{ player.stats.INT }}</td>
-          <td>{{ player.stats.SKL }}</td>
-          <td>{{ player.stats.SPD }}</td>
-          <td>{{ player.stats.SHT }}</td>
-          <td>{{ player.stats.PAS }}</td>
-          <td>{{ player.stats.DEX }}</td>
-          <td>{{ player.stats.FO }}</td>
-          <td>{{ player.stats.AGG }}</td>
-          <td>{{ player.acquire.beer }}</td>
-          <td>{{ player.acquire.charm }}</td>
-          <td>{{ player.acquire.money }}</td>
-          <td><button @click="recruitPlayer(player.id)">Recruit</button></td>
-        </tr>
-      </tbody>
-    </table>
-        <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Position</th>
-          <th>ANG</th>
-          <th>REF</th>
-          <th>ANT</th>
-          <th>Beer</th>
-          <th>Charm</th>
-          <th>Money</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="player in goaliesList" :key="player.id">
-          <td>{{ player.info.name }}</td>
-          <td>{{ player.info.position }}</td>
-          <td>{{ player.goalieStats.ANG }}</td>
-          <td>{{ player.goalieStats.REF }}</td>
-          <td>{{ player.goalieStats.ANT }}</td>
-          <td>{{ player.acquire.beer }}</td>
-          <td>{{ player.acquire.charm }}</td>
-          <td>{{ player.acquire.money }}</td>
-          <td><button @click="recruitPlayer(player.id)">Recruit</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
+    <div class="game-intro-page">
+        <div class="main-menu" v-if="!steps">
+            <div class="game-logo">
+                <img src="@/assets/images/logo-beer-league-hockey.png" alt="" />
+            </div>
+            <div class="button-actions">
+                <Button @click="advance">Start New</button>
+                <Button>Load Game</button>
+            </div>
+        </div>
+        <div class="team-selection" v-if="steps === 1">
+            <TeamSelection @back="back" @next="advance"></TeamSelection>
+        </div>
+         <div class="team-selection" v-if="steps === 2">
+            <GMSelection @reset="reset" @back="back" @next="advance"></GMSelection>
+        </div>
+    </div>
 </template>
-
 <script>
-import { mapGetters } from 'vuex'
 export default {
-  computed: {
-    ...mapGetters([
-      "getPlayersByPosition",
-      "players"
-    ]),
-    goaliesList() {
-      return [...this.getPlayersByPosition("G")]
+    data() {
+        return {
+            steps: 0,
+        }
     },
-    playersList() {
-      return [...this.getPlayersByPosition("F"),...this.getPlayersByPosition("D")]
-    },
-  },
-  methods: {
-    recruitPlayer(playerId) {
-
+    methods: {
+        advance() {
+            this.steps++
+        },
+        back() {
+            this.steps--
+        },
+        reset() {
+            this.$emit("reset")
+        }
     }
-  }
 }
 </script>
+<style lang="scss" scoped>
+.game-intro-page {
+    height: 100%;
+    text-align: center;
+    .game-logo {
+        max-width: 20rem;
+        margin: auto;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .button-actions {
+        display: flex;
+        flex-direction: column;
+        margin: 1rem auto;
+        width: fit-content;
+    }
+    .team-selection {
+        margin: 0 auto;
+        h2 {
+            margin: 1rem auto;
+        }
+    }
+}
+
+</style>

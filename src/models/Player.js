@@ -1,5 +1,5 @@
 
-export default class PlayerCard {
+export default class Player {
     static default = {
         id: 0,
         info: {
@@ -16,7 +16,7 @@ export default class PlayerCard {
             SHT: 0,
             PAS: 0,
             DEX: 0,
-            
+
             FO: 0,
             AGG: 0,
         },
@@ -31,8 +31,8 @@ export default class PlayerCard {
             money: 0,
         }
     }
-     
+
     constructor(prop = {}) {
-        Object.assign(this, PlayerCard.default, prop);
+        Object.assign(this, Player.default, prop);
     }
 }
