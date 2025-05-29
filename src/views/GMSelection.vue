@@ -2,19 +2,22 @@
     <div>
         <div>
             <h1>Manager/Head Coach Selection</h1>
-           <div>
-                <button @click="changeFace(-1)" :disabled="currentFace <= 0">&gt;</button>
-            </div>
-            <div class="manager-face-section">
-                <div class="manager-face">
-                    <div class="manager-face-image-container">
-                        <img :src="require(`@/assets/images/managers/${selectedFace}.png`)" alt=""/>
+            <div class="manager-section">
+                <div>
+                    <button @click="changeFace(-1)" :disabled="currentFace <= 0">&lt;</button>
+                </div>
+                <div class="manager-face-section">
+                    <div class="manager-face">
+                        <div class="manager-face-image-container">
+                            <img :src="require(`@/assets/images/managers/${selectedFace}.png`)" alt=""/>
+                        </div>
                     </div>
                 </div>
+                <div >
+                    <button @click="changeFace(1)" :disabled="numberOfFaces === (currentFace + 1)">&gt;</button>
+                </div>
             </div>
-            <div >
-                <button @click="changeFace(1)" :disabled="numberOfFaces === (currentFace + 1)">&gt;</button>
-            </div>
+
         </div>
         <div class="action-buttons">
             <Button secondary @click="back">Back</Button>
@@ -54,37 +57,62 @@ export default {
             if (currentVal <= -1 || currentVal >= this.numberOfFaces) return
             this.selectedFace = `face_${currentVal}`
             this.currentFace = currentVal
-            this.$emit("update", this.selectedOptions)
+            this.$emit("update", this.selectedFace)
         },
-    }
+    },
 }
 </script>
 <style lang="scss" scoped>
-.manager-face-section {
+.manager-section {
     display: flex;
     justify-content: center;
-    .manager-face {
+    align-items: center;
+    button {
+        font-size: 2rem;
+        padding: 1rem;
+        margin: 0 1rem;
+    }
+    .manager-face-section {
+        display: flex;
+        justify-content: center;
 
-        background: orange;
-        position: relative;
-        border: 1rem solid black;
-        width: 10rem;
-        height: 10rem;
-        z-index: 3;
-        .manager-face-image-container {
+        .manager-face {
             position: relative;
-            bottom: -1rem;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            img {
-                width: auto;
+            width: 12rem;
+            height: 13rem;
+            border: none;
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
                 height: 100%;
-                margin-bottom: -1rem;
+                border: 1rem solid black;
+                z-index: 2;
+                pointer-events: none;
+                box-sizing: border-box;
+            }
+
+            .manager-face-image-container {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                display: flex;
+                justify-content: center;
+                align-items: self-end;
+                img {
+                    width: auto;
+                    height: 12rem;
+                    max-height: 100%;
+                    display: block;
+                }
             }
         }
-
     }
 }
+
+
 
 </style>

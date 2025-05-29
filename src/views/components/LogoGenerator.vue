@@ -67,6 +67,7 @@
             @update="updateSelected"
             :selected="selected"
         ></JerseyGenerator>
+
     </div>
 </template>
 
@@ -78,7 +79,7 @@ import colors from "@/data/colors"
 export default {
     computed: {
         ...mapGetters([
-            "images",
+            "images"
         ]),
         colors() {
             return colors

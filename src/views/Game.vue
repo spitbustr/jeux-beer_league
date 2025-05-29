@@ -18,7 +18,16 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+    computed: {
+        ...mapGetters(["teams"]),
+        teamsList() {
+            console.log(this.teams)
+            return this.teams
+        }
+    },
     data() {
         return {
             steps: 0,

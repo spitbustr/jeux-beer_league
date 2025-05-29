@@ -18,6 +18,8 @@ export default new Vuex.Store({
       dispatch("initializeLogoList")
       dispatch("initializeJerseysList")
       dispatch("initializeManagersList")
+      commit(SET_TEAMS_LIST,TeamGenerationService.generateTeamsList())
+
     },
     initializeLogoList({commit}) {
       const getImages = require.context("@/assets/images/logos", true, /\.png$/)
@@ -36,7 +38,7 @@ export default new Vuex.Store({
     },
     setUser({commit},user) {
       commit(SET_USER,user)
-      commit(SET_TEAMS_LIST,TeamGenerationService.generateTeamsList())
+
       commit(SET_PLAYERS_LIST,PlayerGenerationService.generatePlayersList())
     }
   },
@@ -47,6 +49,9 @@ export default new Vuex.Store({
     },
     teams: (state) => {
       return state.teams
+    },
+    jerseys: (state) => {
+      return state.jerseysImages
     },
     images: (state) => {
       return {

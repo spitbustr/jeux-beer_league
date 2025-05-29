@@ -70,7 +70,7 @@ export default class TeamGenerationService {
             }
             return {
                 id: index,
-                fullName: `${baseName} ${city}`,
+                fullName: `${city} ${baseName}`,
                 name: `${baseName}`,
                 city,
                 jersey: {

@@ -27,8 +27,8 @@ button {
 
     background: linear-gradient(135deg, black, #0072ff);
     color: white;
-    padding: 1.75rem 3.5rem;
-    font-size: 2rem;
+    padding: 1rem 1.75rem;
+    font-size: 1.75rem;
     font-weight: bold;
     border: 5px solid black;
     border-radius: 9999px;
