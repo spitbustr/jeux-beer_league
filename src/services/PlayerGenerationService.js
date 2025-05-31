@@ -1,6 +1,7 @@
 import firstNames from "@/data/names"
 import lastNames from "@/data/lastNames"
 import Player from "@/models/Player"
+
 function getRandomStat() {
   const roll = Math.random()
   if (roll < 0.1) return 1
@@ -8,6 +9,33 @@ function getRandomStat() {
   if (roll < 0.7) return 3
   if (roll < 0.9) return 4
   return 5
+}
+function getRandomPersonality() {
+  const shapes = ['square', 'circle', 'triangle']
+  const colors = ['red', 'green', 'blue']
+
+  return {
+    shape: shapes[Math.floor(Math.random() * shapes.length)],
+    color: colors[Math.floor(Math.random() * colors.length)]
+  }
+}
+function getRandomAttributes() {
+  const attributeKeys = ['married', 'kids', 'party', 'nogym', 'nightshift']
+  const shuffled = [...attributeKeys].sort(() => Math.random() - 0.5)
+  const maxTrue = Math.floor(Math.random() * 4) // 0 to 3
+
+  const temp = {}
+  shuffled.forEach((key, index) => {
+    temp[key] = index < maxTrue
+  })
+
+  // Rebuild object in original attributeKeys order
+  const result = {}
+  attributeKeys.forEach(key => {
+    result[key] = temp[key] || false
+  })
+
+  return result
 }
 
 function getRandomDuoStat() {
@@ -75,17 +103,19 @@ export default class PlayerGenerationService {
       const avgGoalieStats = coreGoalieStats.reduce((sum, key) => sum + goalieStats[key], 0) / coreGoalieStats.length
 
       const acquire = calculateAcquireCost(position === "G" ? avgGoalieStats : avgStat)
-
+      const attributes = getRandomAttributes()
+      const personnality = getRandomPersonality()
       return new Player({
         id,
         info: {
           name: `${firstName} ${lastName}`,
           position,
-          personnality: null
+          personnality,
         },
         stats,
         goalieStats,
-        acquire
+        acquire,
+        attributes,
       })
     }
 

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import PlayerGenerationService from '@/services/PlayerGenerationService'
 import TeamGenerationService from '@/services/TeamGenerationService'
+import EventGenerationService from '@/services/EventGenerationService'
 
 Vue.use(Vuex)
 
@@ -11,6 +12,7 @@ const SET_LOGOS_LIST = "SET_LOGOS_LIST"
 const SET_JERSEYS_LIST = "SET_JERSEYS_LIST"
 const SET_USER = "SET_USER"
 const SET_MANAGERS_LIST = "SET_MANAGERS_LIST"
+const SET_EVENTS_LIST = "SET_EVENTS_LIST"
 
 export default new Vuex.Store({
   actions: {
@@ -19,6 +21,8 @@ export default new Vuex.Store({
       dispatch("initializeJerseysList")
       dispatch("initializeManagersList")
       commit(SET_TEAMS_LIST,TeamGenerationService.generateTeamsList())
+      commit(SET_EVENTS_LIST,EventGenerationService.generateEventsList())
+      commit(SET_PLAYERS_LIST,PlayerGenerationService.generatePlayersList())
 
     },
     initializeLogoList({commit}) {
@@ -44,6 +48,9 @@ export default new Vuex.Store({
   },
 
   getters: {
+    events: (state) => {
+      return state.eventsCards
+    },
     players: (state) => {
       return state.players
     },
@@ -72,6 +79,7 @@ export default new Vuex.Store({
     [SET_JERSEYS_LIST]: (state,jerseys) => {state.jerseysImages = jerseys},
     [SET_USER]: (state,user) => {state.user = user},
     [SET_MANAGERS_LIST]: (state,managersImages) => {state.managersImages = managersImages},
+    [SET_EVENTS_LIST]: (state,events) => {state.eventsCards = events},
   },
   state: {
     user: {},

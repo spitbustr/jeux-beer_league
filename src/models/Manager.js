@@ -7,8 +7,9 @@ export default class Manager {
             lastName: "",
         },
         stats: {
-            charm: 0,
+            relationship: 0,
             responsabiliy: 0,
+            
         },
         items: {
             cards: [],

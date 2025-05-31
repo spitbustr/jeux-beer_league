@@ -6,7 +6,7 @@ const routes = [
   {
     path: '/',
     name: 'game',
-    component: () => import('@/views/Game.vue')
+    component: () => import('@/views/views/Game.vue')
   },
 ]
 

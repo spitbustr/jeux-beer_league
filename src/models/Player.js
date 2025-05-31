@@ -27,8 +27,17 @@ export default class Player {
         },
         acquire: {
             beer: 0,
-            charm: 0,
             money: 0,
+        },
+        attributes: {
+            married: false,
+            kids: false,
+
+            party: false,
+            nogym: false,
+
+            nightshift: false,
+            
         }
     }
 

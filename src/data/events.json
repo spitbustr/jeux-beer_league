@@ -1,0 +1,132 @@
+[
+    {
+        "name": "Working Overtime",
+        "description": "Some of your players have to work overtime, for the players who do not work late, this card has no effect",
+        "icons": ["nightshift"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["nightshift"]
+            }
+        },
+        "amountOfCards": 4
+    },
+    {
+        "name": "No Babysitter",
+        "description": "Some of your players have no babysitter tonight, for the players who do not have kids, this card has no effect",
+        "icons": ["kids"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["kids"]
+            }
+        },
+        "amountOfCards": 4
+    },
+    {
+        "name": "Family Trip",
+        "description": "Some of your players are on a family trip, for the players who do not have kids or wife, this card has no effect",
+        "icons": ["kids","married"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["kids","married"]
+            }
+        },
+        "amountOfCards": 4
+    },
+    {
+        "name": "Personal reasons",
+        "description": "Some of your players are on a family trip, for the players who do not have kids or wife, this card has no effect",
+        "icons": ["wild"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["kids","married","nogym","nightshift","party"]
+            }
+        },
+        "amountOfCards": 2
+    },
+    {
+        "name": "Out All Night",
+        "description": "Some of your players are on a family trip, for the players who do not have kids or wife, this card has no effect",
+        "icons": ["nightshift","party"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["nightshift","party"]
+            }
+        },
+        "amountOfCards": 2
+    },
+    {
+        "name": "Sick Day",
+        "description": "Some of your players are on a family trip, for the players who do not have kids or wife, this card has no effect",
+        "icons": ["nogym","party"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["nogym","party"]
+            }
+        },
+        "amountOfCards": 2
+    },
+    {
+        "name": "Kind of Injured",
+        "description": "Some of your players are injured, for the players who do not have a bad shape, this card has no effect",
+        "icons": ["nogym"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["nogym"]
+            }
+        },
+        "amountOfCards": 4
+    },
+    {
+        "name": "Hungover",
+        "description": "Some of your players are hungover, for the players who are not party animals, this card has no effect",
+        "icons": ["party"],
+        "results": {
+            "missing": {
+                "games": 1,
+                "challenges": ["party"]
+            }
+        },
+        "amountOfCards": 6
+    },
+
+    {
+        "name": "Injury",
+        "description": "One of your players is injured for 1 game",
+        "icons": ["injury"],
+        "results": {
+            "injury": {
+                "games": 1
+            }
+        },
+        "amountOfCards": 4
+    },
+    {
+        "name": "Injury",
+        "description": "One of your players is injured for 2 games",
+        "icons": ["injury"],
+        "results": {
+            "injury": {
+                "games": 2
+            }
+        },
+        "amountOfCards": 2
+    },
+    {
+        "name": "Lose Item",
+        "description": "You have lost an item",
+        "icons": ["item"],
+        "results": {
+            "items": {
+                "draw": -1
+            }
+        },
+        "amountOfCards": 2
+    }
+]

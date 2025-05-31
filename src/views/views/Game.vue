@@ -12,8 +12,14 @@
         <div class="team-selection" v-if="steps === 1">
             <TeamSelection @back="back" @next="advance"></TeamSelection>
         </div>
-         <div class="team-selection" v-if="steps === 2">
+        <div class="team-selection" v-if="steps === 2">
             <GMSelection @reset="reset" @back="back" @next="advance"></GMSelection>
+        </div>
+        <div class="grid-selection">
+            <Event v-for="(event,index) in events" :key="`event_${index}`" :event="event"></Event>
+        </div>
+        <div class="grid-selection">
+            <Player v-for="(player,index) in players" :key="`player_${index}`" :player="player"></Player>
         </div>
     </div>
 </template>
@@ -22,7 +28,11 @@ import { mapGetters } from 'vuex'
 
 export default {
     computed: {
-        ...mapGetters(["teams"]),
+        ...mapGetters([
+            "teams",
+            "events",
+            "players",
+        ]),
         teamsList() {
             console.log(this.teams)
             return this.teams
@@ -70,6 +80,11 @@ export default {
         h2 {
             margin: 1rem auto;
         }
+    }
+    .grid-selection {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); // Responsive
+        gap: 1.5rem;
     }
 }
 
