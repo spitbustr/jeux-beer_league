@@ -42,7 +42,7 @@
         "results": {
             "missing": {
                 "games": 1,
-                "challenges": ["kids","married","nogym","nightshift","party"]
+                "challenges": ["kids","married","nogym","nightshift","drunk"]
             }
         },
         "amountOfCards": 2
@@ -50,11 +50,11 @@
     {
         "name": "Out All Night",
         "description": "Some of your players are on a family trip, for the players who do not have kids or wife, this card has no effect",
-        "icons": ["nightshift","party"],
+        "icons": ["nightshift","drunk"],
         "results": {
             "missing": {
                 "games": 1,
-                "challenges": ["nightshift","party"]
+                "challenges": ["nightshift","drunk"]
             }
         },
         "amountOfCards": 2
@@ -62,40 +62,15 @@
     {
         "name": "Sick Day",
         "description": "Some of your players are on a family trip, for the players who do not have kids or wife, this card has no effect",
-        "icons": ["nogym","party"],
+        "icons": ["nogym","drunk"],
         "results": {
             "missing": {
                 "games": 1,
-                "challenges": ["nogym","party"]
+                "challenges": ["nogym","drunk"]
             }
         },
         "amountOfCards": 2
     },
-    {
-        "name": "Kind of Injured",
-        "description": "Some of your players are injured, for the players who do not have a bad shape, this card has no effect",
-        "icons": ["nogym"],
-        "results": {
-            "missing": {
-                "games": 1,
-                "challenges": ["nogym"]
-            }
-        },
-        "amountOfCards": 4
-    },
-    {
-        "name": "Hungover",
-        "description": "Some of your players are hungover, for the players who are not party animals, this card has no effect",
-        "icons": ["party"],
-        "results": {
-            "missing": {
-                "games": 1,
-                "challenges": ["party"]
-            }
-        },
-        "amountOfCards": 6
-    },
-
     {
         "name": "Injury",
         "description": "One of your players is injured for 1 game",

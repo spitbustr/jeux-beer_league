@@ -3,7 +3,7 @@
         <label v-html="label"></label>
         <input
             :placeholder="placeholder"
-            :value="modelValue"
+            :value="value"
             @input="$emit('update', $event.target.value)"
             class="input"
             type="text"
@@ -14,7 +14,7 @@
 <script>
 export default {
     props: {
-        modelValue: {
+        value: {
             type: String,
             default: "",
         },

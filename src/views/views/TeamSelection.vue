@@ -5,8 +5,8 @@
         </div>
         <div>
             <InputText
-                :value="teamName"
-                @update="update('teamName', $event)"
+                :value="team.name"
+                @update="update('name', $event)"
                 placeholder="Team name"
                 center
                 label-top
@@ -15,8 +15,8 @@
         </div>
         <div>
             <InputText
-                :value="teamLocation"
-                @update="update('teamLocation', $event)"
+                :value="team.location"
+                @update="update('location', $event)"
                 placeholder="Team location"
                 center
                 label-top
@@ -31,17 +31,18 @@
             <Button @click="nextStep" :disabled="disabled">Next</Button>
         </div>
         <div class="teams-jerseys-list">
-        <div class="jersey-grid">
-            <div class="jersey-item" v-for="team in allTeams" :key="`team_${team.id}`">
-                <h3>{{ team.city }} {{ team.name }}</h3>
-                <JerseyGenerator :selected="team" />
+            <div class="jersey-grid">
+                <div class="jersey-item" v-for="team in allTeams" :key="`team_${team.id}`">
+                    <h3>{{ team.city }} {{ team.name }}</h3>
+                    <JerseyGenerator :selected="team" />
+                </div>
             </div>
-        </div>
         </div>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import Team from '@/models/Team';
 
 export default {
     computed: {
@@ -52,13 +53,12 @@ export default {
             return this.teams
         },
         disabled() {
-            return this.teamName.trim() === "" || this.teamLocation.trim() === ""
+            return this.team.name.trim() === "" || this.team.location.trim() === ""
         },
     },
     data() {
         return {
-            teamName: "",
-            teamLocation: "",
+            team: new Team(),
         }
     },
     methods: {
@@ -66,10 +66,11 @@ export default {
             this.$emit("back")
         },
         nextStep() {
+            this.$emit("update:team", this.team)
             this.$emit("next")
         },
         update(prop, value) {
-            return this[prop] = value
+            return this.team[prop] = value.toUpperCase()
         },
     }
 }

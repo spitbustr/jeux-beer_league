@@ -1,25 +1,37 @@
 <template>
-    <div class="game-intro-page">
-        <div class="main-menu" v-if="!steps">
-            <div class="game-logo">
-                <img src="@/assets/images/logo-beer-league-hockey.png" alt="" />
+    <div class="game-page">
+        <div class="game-page-tabs">
+            <!-- Hamburger Menu on Mobile -->
+            <div class="hamburger" @click="showMenu = !showMenu">
+                ☰
             </div>
-            <div class="button-actions">
-                <Button @click="advance">Start New</button>
-                <Button>Load Game</button>
+
+            <div class="tab-groups" :class="{ open: showMenu }">
+                <div class="game-page-tab-group">
+                    <div class="game-page-tab-group-title">Personal</div>
+                    <div>
+                        <div class="game-page-tab" @click="view = 'manager'">Manager</div>
+                        <div class="game-page-tab" @click="view = 'team'">Team</div>
+                        <div class="game-page-tab" @click="view = 'items'">Items/Equipments</div>
+                    </div>
+                </div>
+                <div class="game-page-tab-group">
+                    <div class="game-page-tab-group-title">League</div>
+                    <div>
+                        <div class="game-page-tab" @click="view = 'standings'">Standings</div>
+                        <div class="game-page-tab" @click="view = 'leaders'">Leaders</div>
+                        <div class="game-page-tab" @click="view = 'calendar'">Calendar</div>
+                    </div>
+                </div>
             </div>
+
+            <!-- "Play" tab/button always top right -->
+            <button class="play-button" @click="view = 'play'">Play</button>
         </div>
-        <div class="team-selection" v-if="steps === 1">
-            <TeamSelection @back="back" @next="advance"></TeamSelection>
-        </div>
-        <div class="team-selection" v-if="steps === 2">
-            <GMSelection @reset="reset" @back="back" @next="advance"></GMSelection>
-        </div>
-        <div class="grid-selection">
-            <Event v-for="(event,index) in events" :key="`event_${index}`" :event="event"></Event>
-        </div>
-        <div class="grid-selection">
-            <Player v-for="(player,index) in players" :key="`player_${index}`" :player="player"></Player>
+        <div class="game-page-content">
+            <transition name="slide-fade" mode="out-in">
+                <component :is="currentView" :key="view" />
+            </transition>
         </div>
     </div>
 </template>
@@ -32,60 +44,104 @@ export default {
             "teams",
             "events",
             "players",
+            "images",
         ]),
-        teamsList() {
-            console.log(this.teams)
-            return this.teams
+        currentView() {
+            const map = {
+                manager: 'Manager',
+                team: 'Team',
+                items: 'Items',
+                standings: 'Standings',
+                leaders: 'LeagueLeaders',
+                calendar: 'Calendar',
+                play: 'Play'
+            }
+            return map[this.view]
         }
     },
     data() {
         return {
-            steps: 0,
+            view: "team",
+            showMenu: false
         }
     },
     methods: {
-        advance() {
-            this.steps++
-        },
-        back() {
-            this.steps--
-        },
-        reset() {
-            this.$emit("reset")
-        }
+
     }
 }
 </script>
 <style lang="scss" scoped>
-.game-intro-page {
-    height: 100%;
-    text-align: center;
-    .game-logo {
-        max-width: 20rem;
-        margin: auto;
-
-        img {
-            width: 100%;
-        }
-    }
-
-    .button-actions {
-        display: flex;
-        flex-direction: column;
-        margin: 1rem auto;
-        width: fit-content;
-    }
-    .team-selection {
-        margin: 0 auto;
-        h2 {
-            margin: 1rem auto;
-        }
-    }
-    .grid-selection {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); // Responsive
-        gap: 1.5rem;
-    }
+/* Slide transition */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all 0.4s ease;
 }
 
+.slide-fade-enter,
+.slide-fade-leave-to {
+    transform: translateX(20px);
+    opacity: 0;
+}
+
+/* Responsive layout */
+.game-page-tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+
+    .tab-groups {
+        display: flex;
+        gap: 1rem;
+
+        @media (max-width: 768px) {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            background: #222;
+            top: 100%;
+            left: 0;
+            padding: 1rem;
+            z-index: 10;
+
+            &.open {
+                display: flex;
+            }
+        }
+    }
+
+    .hamburger {
+        display: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+
+        @media (max-width: 768px) {
+            display: block;
+        }
+    }
+
+    .play-button {
+        background: #ff3b3f;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .game-page-tab {
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    .game-page-tab-group-title {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+}
 </style>

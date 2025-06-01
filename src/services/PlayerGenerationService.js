@@ -10,6 +10,14 @@ function getRandomStat() {
   if (roll < 0.9) return 4
   return 5
 }
+function shuffleArray(array) {
+  const arr = [...array]; // create a shallow copy to avoid mutating the original
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+    [arr[i], arr[j]] = [arr[j], arr[i]]; // swap elements
+  }
+  return arr;
+}
 function getRandomPersonality() {
   const shapes = ['square', 'circle', 'triangle']
   const colors = ['red', 'green', 'blue']
@@ -20,8 +28,8 @@ function getRandomPersonality() {
   }
 }
 function getRandomAttributes() {
-  const attributeKeys = ['married', 'kids', 'party', 'nogym', 'nightshift']
-  const shuffled = [...attributeKeys].sort(() => Math.random() - 0.5)
+  const attributeKeys = ['married', 'kids', 'drunk', 'nogym', 'nightshift']
+  const shuffled = shuffleArray(attributeKeys)
   const maxTrue = Math.floor(Math.random() * 4) // 0 to 3
 
   const temp = {}
@@ -93,9 +101,9 @@ export default class PlayerGenerationService {
         AGG: position === 'G' ? 0 : getRandomBigStat()
       }
       const goalieStats = {
-        ANG: position === 'G' ? getRandomStat() : 0,
+        ANT: position === 'G' ? getRandomStat() : 0,
         REF: position === 'G' ? getRandomDuoStat() : 0,
-        ANT: position === 'G' ? getRandomStat() : 0 
+        ANG: position === 'G' ? getRandomStat() : 0,
       }
       const coreStats = ['INT', 'SKL', 'SPD', 'SHT', 'PAS', 'DEX']
       const coreGoalieStats = ['ANG', 'REF', 'ANT']
@@ -136,5 +144,8 @@ export default class PlayerGenerationService {
 
 
     return players
+  }
+  static rebuildPlayer(data) {
+    return new Player(data)
   }
 }

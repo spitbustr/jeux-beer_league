@@ -14,8 +14,8 @@
         ></div>
         <svg
           v-else-if="player.info.personnality.shape === 'triangle'"
-          width="24"
-          height="24"
+          width="75"
+          height="75"
           viewBox="0 0 30 30"
         >
           <polygon
@@ -29,35 +29,39 @@
         <h2 class="player-name">{{ player.info.name || "Unnamed Player" }}</h2>
       </div>
       <div class="player-position">
-        {{ player.info.position || "Unknown Position" }}
+        <span>{{ player.info.position || "Unknown Position" }}</span>
       </div>
     </div>
-
+    <hr class="stat-separator" />
     <div class="stats" v-if="player.info.position !== 'G'">
       <div class="stat-pair">
         <span class="stat-key">INT</span>
         <span class="stat-value">{{ player.stats.INT }}</span>
+        <span>|</span>
         <span class="stat-key">DEX</span>
         <span class="stat-value">{{ player.stats.DEX }}</span>
       </div>
       <div class="stat-pair">
         <span class="stat-key">SKL</span>
         <span class="stat-value">{{ player.stats.SKL }}</span>
+        <span>|</span>
         <span class="stat-key">PAS</span>
         <span class="stat-value">{{ player.stats.PAS }}</span>
       </div>
       <div class="stat-pair">
         <span class="stat-key">SPD</span>
         <span class="stat-value">{{ player.stats.SPD }}</span>
+        <span>|</span>
         <span class="stat-key">SHT</span>
         <span class="stat-value">{{ player.stats.SHT }}</span>
       </div>
 
       <hr class="stat-separator" />
 
-      <div class="stat-pair">
+      <div class="stat-pair stat-force">
         <span class="stat-key">FO</span>
         <span class="stat-value">{{ player.stats.FO }}</span>
+        <span>|</span>
         <span class="stat-key">AGG</span>
         <span class="stat-value">{{ player.stats.AGG }}</span>
       </div>
@@ -67,20 +71,19 @@
       <div
         v-for="(value, key) in player.goalieStats"
         :key="key"
-        class="stat-row"
+        class="stat-pair"
       >
         <span class="stat-key">{{ key }}</span>
         <span class="stat-value">{{ value }}</span>
       </div>
     </div>
-
+    <hr class="stat-separator" />
     <div class="attributes">
-      <template v-for="(value, key) in player.attributes">
-        <span :key="key" v-if="value" class="attribute-badge">
-          {{ key }}
-        </span>
-      </template>
+      <div v-for="(attribute, key) in attributes" class="attribute-badge" :key="key">
+        <img :src="require(`@/assets/images/attributes/${attribute}.png`)" />
+      </div>
     </div>
+    <hr class="stat-separator" />
     <div class="acquire">
       🍺 {{ player.acquire.beer }} | 💰 {{ player.acquire.money }}
     </div>
@@ -96,6 +99,11 @@ export default {
     },
   },
   computed: {
+    attributes() {
+      return Object.keys(this.player.attributes).filter(key =>
+        this.player.attributes[key]
+      )
+    },
     cardClass() {
       return [
         this.player.info.position.toLowerCase() === "f"
@@ -132,10 +140,11 @@ export default {
       background: #e6fcf7;
     }
     &-defenceman {
-      background: #f0e6ff;
+      background: #fff1e6;
     }
     &-goalie {
-      background: #fff1e6;
+
+      background: #f0e6ff;
     }
   }
 }
@@ -182,22 +191,27 @@ export default {
 }
 
 .player-position {
+  align-items: center;
+  display: flex;
+  background: white;
+  padding: 0.15rem 0.25rem;
   font-size: 16px;
   font-weight: bold;
   color: black;
+  justify-content: center;
   margin: 0;
 }
 
 .stats,
 .goalie-stats {
-    .stat-row {
-        justify-content: flex-start;
-        gap: 1rem;
-    }
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
   gap: 4px;
   margin-bottom: 10px;
+  .stat-row {
+    justify-content: flex-start;
+    gap: 1rem;
+  }
 }
 
 .stat-row {
@@ -213,38 +227,55 @@ export default {
 
 .attributes {
   display: flex;
+  height: 2.25rem;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
+
+  .attribute-badge {
+    &:not(:empty) {
+      font-size: 12px;
+      margin: 0 0.25rem;
+      max-width: 2rem;
+      img {
+        width: 100%;
+      }
+    }
+
+  }
 }
 
-.attribute-badge {
-  background-color: #eee;
-  color: #333;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 12px;
-}
 .stat-pair {
   display: grid;
-  grid-template-columns: auto 1fr auto 1fr;
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px 8px;
   margin-bottom: 4px;
   align-items: center;
+  &:nth-child(1) {
+    background: yellow;
+  }
+  &:nth-child(2) {
+    background: lightgreen;
+  }
+  &:nth-child(3) {
+    background: lightblue;
+  }
 }
 
 .stat-key {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 14px;
   color: #444;
   width: 2rem;
 }
 
 .stat-value {
-    width: 1.5rem;
+  width: 1.5rem;
   text-align: right;
-  font-size: 13px;
+  font-size: 16px;
   color: #222;
   text-align: right;
+  font-weight: bold;
 }
 
 .stat-separator {

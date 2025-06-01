@@ -2,12 +2,13 @@ import hockeyEvents from "@/data/events"
 
 export default class EventGenerationService {
   // Fisher-Yates shuffle
-  static shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[array[i], array[j]] = [array[j], array[i]]
+  static shuffleArray(array) {
+    const arr = [...array]; // create a shallow copy to avoid mutating the original
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+      [arr[i], arr[j]] = [arr[j], arr[i]]; // swap elements
     }
-    return array
+    return arr;
   }
 
   static generateEventsList() {
@@ -17,6 +18,6 @@ export default class EventGenerationService {
         deck.push({ ...event })
       }
     })
-    return this.shuffle(deck)
+    return this.shuffleArray(this.shuffleArray(deck))
   }
 }

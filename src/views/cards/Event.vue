@@ -4,13 +4,16 @@
     <div class="event-header">
       <h2 class="event-title">{{ event.name }}</h2>
       <template v-if="event.icons">
-        <img
-            v-for="(icon,index) in event.icons"
-            :src="`/icons/${event.icon}.png`"
-            alt=""
-            class="event-icon"
-            :key="`icon_${index}_${icon}`"
-        />
+        <div class="event-list">
+          <img
+              v-for="(icon,index) in event.icons"
+              :src="require(`@/assets/images/attributes/${icon}.png`)"
+              alt=""
+              class="event-icon"
+              :key="`icon_${index}_${icon}`"
+          />
+        </div>
+
       </template>
     </div>
 
@@ -51,7 +54,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .event-card {
   width: 11rem;
   border: 1px solid #ccc;
@@ -111,5 +114,13 @@ export default {
   font-size: 11px;
   color: #777;
   margin-top: 6px;
+}
+.event-list {
+  display: flex;
+  align-items: center;
+  > img {
+    margin-left: 0.25rem;
+  }
+
 }
 </style>

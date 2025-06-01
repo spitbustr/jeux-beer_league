@@ -2,14 +2,13 @@
 export default class Manager {
     static default = {
         infos: {
-            image: "jersey_0",
-            firstName: "",
-            lastName: "",
+            image: "face_0_m",
+            fullName: "Theo Boivin",
+            gender: "m"
         },
         stats: {
             relationship: 0,
             responsabiliy: 0,
-            
         },
         items: {
             cards: [],

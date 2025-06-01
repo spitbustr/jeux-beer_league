@@ -33,12 +33,12 @@ export default class Player {
             married: false,
             kids: false,
 
-            party: false,
+            drunk: false,
             nogym: false,
 
             nightshift: false,
-            
-        }
+        },
+        career: [],
     }
 
     constructor(prop = {}) {
