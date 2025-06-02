@@ -93,12 +93,15 @@
 <script>
 export default {
   props: {
-    player: {
+    data: {
       type: Object,
       required: true,
     },
   },
   computed: {
+    player() {
+      return this.data
+    },
     attributes() {
       return Object.keys(this.player.attributes).filter(key =>
         this.player.attributes[key]

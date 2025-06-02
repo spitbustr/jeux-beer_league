@@ -17,5 +17,7 @@ module.exports = {
     'no-unused-vars' : 'off',
     'vue/require-v-for-key': 'off',
     'vue/no-template-key': 'off',
+    'vue/no-mutating-props': 'off',
+    'vue/no-unused-components': 'off',
   }
 }

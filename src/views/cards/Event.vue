@@ -46,9 +46,14 @@
 export default {
   name: 'Event',
   props: {
-    event: {
+    data: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    event() {
+      return this.data
     }
   }
 }

@@ -28,12 +28,14 @@
         <div class="grid-selection">
             <Player v-for="(player,index) in players" :key="`player_${index}`" :player="player"></Player>
         </div> -->
+        <Deck stacked :originalDeck="players" type="PlayerCard"></Deck>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Manager from '@/models/Manager'
 import Team from '@/models/Team'
+
 export default {
     computed: {
         ...mapGetters([
