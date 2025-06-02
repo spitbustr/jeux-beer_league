@@ -53,7 +53,7 @@ export default class TeamGenerationService {
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
 
-            const city = shuffledCities[index]
+            const location = shuffledCities[index]
             const mainColor = availableMainColors.pop()
 
             const secondaryColor = colors[Math.floor(Math.random() * colors.length)]
@@ -68,26 +68,29 @@ export default class TeamGenerationService {
                     )
                     .join(' ')
             }
-            return {
+            return new Team({
                 id: index,
-                fullName: `${city} ${baseName}`,
                 name: `${baseName}`,
-                city,
-                jersey: {
+                location,
+                jersey: new Jersey({
                     image: jersey,
                     colors: {
                         main: mainColor,
                         secondary: secondaryColor
                     },
-                },
+                }),
                 logo: {
                     image: filename,
                     colors: {
                         main: getLogoColor(mainColor, secondaryColor)
                     }
                 }
-            }
+            })
         })
+        console.log(teams)
         return teams
+    }
+    static rebuildTeam(data) {
+        return new Team(data)
     }
 }

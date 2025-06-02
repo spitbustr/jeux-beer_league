@@ -5,6 +5,7 @@ import store from './store'
 import "@/assets/styles/site.scss"
 
 Vue.config.productionTip = false
+Vue.prototype.$events = new Vue()
 // Add library components
 const getComponent = require.context("@/views", true, /\.vue$/)
 getComponent.keys().forEach(key => {

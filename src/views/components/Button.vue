@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'secondary':secondary}">
+    <div :class="{'secondary':secondary, 'smaller':smaller}">
         <button @click="click($event)" :disabled="disabled">
             <slot></slot>
         </button>
@@ -16,6 +16,7 @@ export default {
     props: {
         secondary: Boolean,
         disabled: Boolean,
+        smaller: Boolean,
     },
 };
 </script>
@@ -49,6 +50,10 @@ button {
     .secondary & {
         background: linear-gradient(135deg, #FFFFFF, #FFFFFF);
         color: black;
+    }
+    .smaller & {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
     }
     &:disabled {
         opacity: 0.7;
