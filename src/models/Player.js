@@ -1,6 +1,7 @@
 
 export default class Player {
     static default = {
+        type: "PlayerCard",
         id: 0,
         info: {
             name: null,

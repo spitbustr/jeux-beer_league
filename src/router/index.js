@@ -1,13 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import $settings from "@/data/settings"
+import store from "@/store"
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'intro',
-    component: () => import('@/views/views/Intro.vue')
+    component: () => import('@/views/views/Test.vue')
   },
+  //   {
+  //   path: '/',
+  //   name: 'intro',
+  //   component: () => import('@/views/views/Intro.vue')
+  // },
   {
     path: '/game/:id',
     name: 'game',

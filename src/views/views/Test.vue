@@ -1,33 +1,5 @@
 <template>
     <div class="game-intro-page">
-        <div class="main-menu" v-if="!steps">
-            <div class="game-logo">
-                <img src="@/assets/images/logo-beer-league-hockey.png" alt="" />
-            </div>
-            <div class="button-actions">
-                <Button @click="advance" :disabled="games.length >= 3">Start New</button>
-                <Button @click="load">Load Game</button>
-            </div>
-        </div>
-        <div class="team-selection" v-if="steps === 1">
-            <TeamSelection
-                @back="back"
-                @next="advance"
-                @update:team="updateTeam"></TeamSelection>
-        </div>
-        <div class="team-selection" v-if="steps === 2">
-            <GMSelection
-                @reset="reset"
-                @back="back"
-                @next="advance"
-                @update:manager="updateManager"></GMSelection>
-        </div>
-        <!-- <div class="grid-selection">
-            <Event v-for="(event,index) in events" :key="`event_${index}`" :event="event"></Event>
-        </div>
-        <div class="grid-selection">
-            <Player v-for="(player,index) in players" :key="`player_${index}`" :player="player"></Player>
-        </div> -->
         <div>
             <CardDeck
                 :originalDeck="events"
@@ -106,6 +78,7 @@ export default {
 .game-intro-page {
     height: 100%;
     text-align: center;
+    padding-bottom: 18rem;
     .game-logo {
         max-width: 20rem;
         margin: auto;

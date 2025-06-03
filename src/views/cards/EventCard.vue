@@ -27,11 +27,11 @@
 
     <!-- Effects -->
     <div class="event-effects">
-      <div v-if="event.results.missing">
+      <div v-if="event?.results?.missing">
         <p><strong>Games Missed:</strong> {{ event.results.missing.games }}</p>
         <p><strong>Affected Attribute:</strong> {{ event.results.missing.challenge }}</p>
       </div>
-      <div v-else-if="event.results.injury">
+      <div v-else-if="event?.results?.injury">
         <p><strong>Injury Duration:</strong> {{ event.results.injury.games }} game(s)</p>
       </div>
       <div v-else>
@@ -44,10 +44,9 @@
 
 <script>
 export default {
-  name: 'Event',
   props: {
     data: {
-      type: Object,
+      type: [Event,Object],
       required: true
     }
   },
@@ -62,15 +61,22 @@ export default {
 <style lang="scss" scoped>
 .event-card {
   width: 11rem;
-  border: 1px solid #ccc;
+  height: 18rem;
+  border: 1px solid green;
   border-radius: 12px;
-  padding: 16px;
+  padding: 0.5rem;
   background-color: white;
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  * {
+    cursor: pointer;
+    user-select: none;
+  }
 }
 
 .event-header {

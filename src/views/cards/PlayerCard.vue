@@ -91,10 +91,11 @@
 </template>
 
 <script>
+import Player from "@/models/Player"
 export default {
   props: {
     data: {
-      type: Object,
+      type: Player,
       required: true,
     },
   },
@@ -132,12 +133,19 @@ export default {
 <style lang="scss" scoped>
 .player-card {
   width: 11rem;
-  padding: 16px;
-  border: 1px solid #ccc;
+  height: 18rem;
+  padding: 0.5rem;
+  border: 1px solid blue;
   border-radius: 10px;
   background: #fff;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
+  cursor: pointer;
+  user-select: none;
+  * {
+    cursor: pointer;
+    user-select: none;
+  }
   &.position {
     &-forward {
       background: #e6fcf7;

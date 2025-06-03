@@ -15,7 +15,7 @@ export default class EventGenerationService {
     const deck = [];
     hockeyEvents.forEach(event => {
       for (let i = 0; i < event.amountOfCards; i++) {
-        deck.push({ ...event })
+        deck.push({...event,type: "EventCard"})
       }
     })
     return this.shuffleArray(this.shuffleArray(deck))

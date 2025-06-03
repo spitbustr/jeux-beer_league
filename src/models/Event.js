@@ -2,10 +2,11 @@
 import Result from "@/models/Result"
 export default class Event {
     static default = {
-        id: "",
         name: "",
-        detail: "",
-        results: new Result(),
+        description: "",
+        icons: [],
+        results: {},
+        amountOfCards: 4,
     }
 
     constructor(prop = {}) {

@@ -2,6 +2,7 @@
 import Result from "@/models/Result"
 export default class Item {
     static default = {
+        type: "ItemCard",
         id: "",
         name: "",
         detail: "",

@@ -87,7 +87,6 @@ export default class TeamGenerationService {
                 }
             })
         })
-        console.log(teams)
         return teams
     }
     static rebuildTeam(data) {

@@ -7,15 +7,18 @@ export default class Result {
         injury: {
             games: 0,
         },
-        missing: {
-            games: 1,
-            challenge: ""
-        },
-        item: {
-            card: "",
-            pick: 0,
-            draw: 0,
+        results: {
+            missing: {
+                games: 1,
+                challenge: ""
+            },
+            item: {
+                card: "",
+                pick: 0,
+                draw: 0,
+            }
         }
+
     }
 
     constructor(prop = {}) {
