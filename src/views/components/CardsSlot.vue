@@ -1,16 +1,9 @@
 <template>
-    <div class="slot-tray">
-        <draggable
-            v-model="localCards"
-            :group="{ name: 'cards', pull: true, put: true }"
-            class="drop-zone"
-            item-key="id"
-            data-group="cards"
-            @change="emitUpdate"
-            :move="handleMove"
-            tag="div"
-        >
-            <div v-for="(card, index) in localCards" :key="card?.id || index" class="card-slot">
+    <div ref="dropZone" class="slot-tray">
+        <draggable  v-model="localCards" :group="{ name: 'cards', pull: true, put: true }" item-key="id"
+            data-group="cards" class="card-container" @change="emitUpdate" :move="handleMove" tag="div"
+            :style="{ gap: computedGap + 'px' }">
+            <div v-for="(card, index) in localCards" :key="card?.id || index" class="card-slot" ref="cardSlots">
                 <div class="card">
                     <component :is="card.type" :data="card" />
                 </div>
@@ -18,6 +11,7 @@
         </draggable>
     </div>
 </template>
+
 
 
 <script>
@@ -39,12 +33,20 @@ export default {
             type: Array,
             required: true
         },
-        type: String
+        type: String,
     },
     data() {
         return {
-            localCards: [...this.cards]
+            localCards: [...this.cards],
+            computedGap: 4
         };
+    },
+    mounted() {
+        this.updateGap()
+        window.addEventListener('resize', this.updateGap)
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.updateGap)
     },
     watch: {
         cards(newVal) {
@@ -66,7 +68,30 @@ export default {
             }
 
             return true;
+        },
+        updateGap() {
+            this.$nextTick(() => {
+                const zone = this.$refs.dropZone;
+                const cardEls = this.$refs.cardSlots;
+
+                if (!zone || !cardEls?.length) return;
+
+                const zoneWidth = zone.clientWidth;
+                const cardWidth = cardEls[0].offsetWidth;
+                const cardCount = this.localCards.length;
+
+                const totalCardWidth = cardWidth * cardCount;
+                console.log(zoneWidth,totalCardWidth,cardCount)
+                if (totalCardWidth < zoneWidth) {
+                    this.computedGap = 4
+                } else {
+                    const availableGap = (zoneWidth - totalCardWidth) / (cardCount - 1);
+                    console.log(availableGap)
+                    this.computedGap = availableGap
+                }
+            });
         }
+
     }
 };
 </script>
@@ -81,7 +106,7 @@ export default {
     border-top: 2px solid #ccc;
     padding: 1.5rem 1rem;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-    max-height: 8rem;
+    max-height: 10rem;
     overflow: hidden;
     transition: max-height 0.3s ease, padding 0.3s ease;
     z-index: 1000;
@@ -92,9 +117,21 @@ export default {
     }
 }
 
-
-.drop-zone {
+.card-container {
     display: flex;
-    gap: 0.25rem;
+    flex-direction: row;
+    align-items: flex-end;
+    transition: gap 0.2s ease;
+}
+
+.card-slot {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    position: relative;
+    transform: scale(.5);
+    &:hover {
+        transform: scale(1.05);
+        z-index: 10;
+    }
 }
 </style>

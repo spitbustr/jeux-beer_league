@@ -173,12 +173,16 @@ export default {
 
             return true;
         },
-        listChanged(evt) {
-            console.log(evt, evt?.added,evt?.removed, evt?.added?.newIndex,evt?.removed?.oldIndex)
-            const added = evt?.added;
-            if (added && typeof added.newIndex === 'number') {
+        listChanged(evt, o) {
+            console.log(evt,o, evt?.added,evt?.removed, evt?.added?.newIndex,evt?.removed?.oldIndex)
+            const added = evt?.added
+            if (this.stacked && added && typeof added.newIndex === 'number') {
                 this.drawnCards.splice(added.newIndex, 1)[0]
-                this.drawnCards.push(added.element);
+                this.drawnCards.push(added.element)
+            }
+            else if(added && typeof added.newIndex === 'number') {
+                this.discardedCards.splice(added.newIndex, 1)[0]
+                this.discardedCards.push(added.element)
             }
             console.log(this.drawnCards)
         },
