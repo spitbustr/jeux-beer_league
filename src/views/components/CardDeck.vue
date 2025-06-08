@@ -2,14 +2,28 @@
     <div class="main-container">
         <div class="deck-column">
             <div class="card-back-stack">
-                <template v-if="deck.length">
-                    <div v-for="(card, index) in deck" :key="`deck_card_back_${index}`" class="card-deck back-drop"
+                <template v-if="deck.filter(i=>i).length">
+                    <div
+                        v-for="(card, index) in deck.filter(i=>i)"
+                        :key="`deck_card_back_${index}`"
+                        class="card-deck back-drop"
                         :style="getStackedStyle(index, true)"></div>
                 </template>
             </div>
-            <draggable :data-group="`deck-${type}`" :list="[]" :move="handleMove"
-                :group="{ name: `deck-${type}`, pull: 'clone', put: false }" :clone="drawFromDeck" item-key="id"
-                tag="div" class="card-deck-section">
+            <!-- Card Deck -->
+            <draggable
+                :data-group="`deck-${type}`"
+                :list="deck"
+                data-card-role="deck"
+                @change="onDeckChanged"
+                @start="onDragStart"
+                @end="onDragEnd($event,deck)"
+                :move="handleMove"
+                :group="{ name: `deck-${type}`, pull: 'clone', put: true }"
+                :clone="drawFromDeck"
+                item-key="id"
+                tag="div"
+                class="card-deck-section">
                 <div v-if="deck.length" class="card-deck" :class="getCardClass" :style="getStackedStyle(deck.length)"
                     @mousedown="startClick" @mouseup="endClick" @mouseleave="cancelClick">
                     <div class="card-name">
@@ -28,10 +42,18 @@
         </div>
 
         <div v-if="stacked" class="card-draw-slot stacked-slot">
-            <draggable ref="discard" :data-group="`deck-${type}`" :move="handleMove" v-model="drawnCards"
-                :group="{ name: `deck-${type}`, pull: true, put: true }" class="discard-slot stacked-pile" tag="div"
+            <draggable
+                ref="discard"
+                :data-group="`deck-${type}`"
+                :move="handleMove"
+                :list="drawnCards"
+                data-card-role="discard"
+                :group="{ name: `deck-${type}`, pull: true, put: true }"
+                class="discard-slot stacked-pile role-discard"
+                tag="div"
+                @end="onDragEnd($event,drawnCards)"
                 @change="listChanged">
-                <div v-for="(card, index) in drawnCards" :key="`card-slot-${index}`" class="card-slot"
+                <div v-for="(card, index) in drawnCards.filter(i => i)" :key="`card-slot-${index}`" class="card-slot"
                     :style="getStackedStyle(index)">
                     <div class="card" :style="getStackedStyle(index)">
                         <component :is="type" :data="card" />
@@ -44,10 +66,18 @@
         <div v-else class="unstacked-slot">
             <!-- Discard pile column -->
             <div class="discard-column">
-                <draggable :data-group="`deck-${type}`" ref="discard" v-model="discardedCards"
-                    :group="{ name: `deck-${type}`, pull: true, put: true }" :clone="cloneCard" :move="handleMove"
-                    @change="listChanged" class="discard-slot stacked-pile" tag="div">
-                    <div v-for="(card, index) in discardedCards" :key="`discard-slot-${index}`" class="card-slot stacked"
+                <draggable
+                    :data-group="`deck-${type}`"
+                    :list="discardedCards"
+                    :group="{ name: `deck-${type}`, pull: true, put: true }"
+                    :clone="cloneCard"
+                    :move="handleMove"
+                    data-card-role="discard"
+                    @change="listChanged"
+                    @end="onDragEnd($event,discardedCards)"
+                    class="discard-slot stacked-pile role-discard"
+                    tag="div">
+                    <div v-for="(card, index) in discardedCards.filter(i => i)" :key="`discard-slot-${index}`" class="card-slot stacked"
                         :style="getStackedStyle(index)">
                         <div class="card">
                             <component :is="type" :data="card"></component>
@@ -57,10 +87,17 @@
             </div>
 
             <!-- Drawn cards column -->
-            <draggable :data-group="`deck-${type}`" :move="handleMove" v-model="drawnCards"
-                :group="{ name: `deck-${type}`, pull: true, put: true }" class="slots" tag="div">
-                <div v-for="(card, index) in drawnCards.slice(0, maxVisibleCards)" :key="`drawn-slot-${index}`"
-                    class="card-slot not-stacked">
+            <draggable
+                :data-group="`deck-${type}`"
+                :move="handleMove"
+                :list="drawnCards"
+                :group="{ name: `deck-${type}`, pull: true, put: true }"
+                class="slots role-drawn"
+                tag="div"
+                @end="onDragEnd($event,discardedCards)"
+                data-card-role="drawn">
+                <div v-for="(card, index) in drawnCards.filter(i => i).slice(0, maxVisibleCards)" :key="`drawn-slot-${index}`"
+                    class="card-slot not-stacked ">
                     <div class="card">
                         <component :is="type" :data="card" />
                     </div>
@@ -88,10 +125,7 @@ export default {
         deckName: String,
         goUnder: Boolean,
         size: String,
-        maxVisibleCards: {
-            type: Number,
-            default: 5,
-        }
+        maxVisibleCards: Number
     },
     data() {
         return {
@@ -152,6 +186,20 @@ export default {
             const fromGroup = from?.dataset?.group;
             const toGroup = to?.dataset?.group;
             const draggedCard = draggedContext.element;
+            if(!from?.dataset?.cardRole || !to?.dataset?.cardRole) {
+                return false
+            }
+            if(from?.dataset?.cardRole === "deck" && to?.dataset?.cardRole !== "deck" && this.deck.length === 0) {
+                return false
+            }
+            if(from?.dataset?.cardRole === "deck" && to?.dataset?.cardRole === "deck") {
+                return true
+            }
+            // Prevent moving to drawnCards if limit reached
+            const isToDrawn = to.dataset?.cardRole === "drawn";
+            if (isToDrawn && this.maxVisibleCards && this.drawnCards.length >= this.maxVisibleCards) {
+                return false;
+            }
             if (toGroup === 'cards') {
                 return true;
             }
@@ -170,11 +218,9 @@ export default {
             ) {
                 this.drawnCards.splice(draggedContext.index, 1)
             }
-
             return true;
         },
         listChanged(evt, o) {
-            console.log(evt,o, evt?.added,evt?.removed, evt?.added?.newIndex,evt?.removed?.oldIndex)
             const added = evt?.added
             if (this.stacked && added && typeof added.newIndex === 'number') {
                 this.drawnCards.splice(added.newIndex, 1)[0]
@@ -184,10 +230,28 @@ export default {
                 this.discardedCards.splice(added.newIndex, 1)[0]
                 this.discardedCards.push(added.element)
             }
-            console.log(this.drawnCards)
+        },
+        onDeckChanged(evt) {
+            const added = evt?.added
+            if (added && typeof added.newIndex === 'number') {
+                const [card] = this.deck.splice(added.newIndex, 1)
+                this.deck.unshift(card)
+            }
+        },
+        onDragEnd(evt,deck) {
+            const { to, from,oldIndex, newIndex } = evt
+            if(evt.to.dataset.cardRole === evt.from.dataset.cardRole) return false
+            const updated = [...deck]
+            const movedItem = updated.splice(oldIndex, 1)[0]
+            updated.splice(newIndex, 0, movedItem)
+
+            deck = updated
+        },
+        onDragStart(evt) {
+            evt.preventDefault()
         },
         resetDeck() {
-            this.deck = [...this.originalDeck]
+            this.deck = [...this.originalDeck.filter(i => i)]
             this.shuffleDeck()
         },
         shuffleDeck(deck) {

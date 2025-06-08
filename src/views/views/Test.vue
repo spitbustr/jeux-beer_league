@@ -4,12 +4,13 @@
             <CardDeck
                 :originalDeck="events"
                 type="EventCard"
-                deckName="events"></CardDeck>
+                deckName="events"
+                :maxVisibleCards="5"></CardDeck>
         </div>
          <div>
             <CardDeck
                 stacked
-                :originalDeck="players"
+                :originalDeck="playersList"
                 type="PlayerCard"
                 deckName="players"></CardDeck>
         </div>
@@ -32,7 +33,10 @@ export default {
         ]),
         teamsList() {
             return this.teams
-        }
+        },
+        playersList() {
+            return this.players.filter((p,i) => i< 10)
+        },
     },
     data() {
         return {

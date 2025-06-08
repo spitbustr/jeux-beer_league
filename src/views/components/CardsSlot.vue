@@ -1,9 +1,23 @@
 <template>
     <div ref="dropZone" class="slot-tray">
-        <draggable  v-model="localCards" :group="{ name: 'cards', pull: true, put: true }" item-key="id"
-            data-group="cards" class="card-container" @change="emitUpdate" :move="handleMove" tag="div"
-            :style="{ gap: computedGap + 'px' }">
-            <div v-for="(card, index) in localCards" :key="card?.id || index" class="card-slot" ref="cardSlots">
+        <draggable
+            v-model="localCards"
+            :group="{ name: 'cards', pull: true, put: true }"
+            item-key="id"
+            data-group="cards"
+            class="card-container"
+            @change="emitUpdate"
+            @end="onDragEnd"
+            :move="handleMove"
+            tag="div"
+            >
+            <div
+                v-for="(card, index) in localCards"
+                :key="`card_hand_${index}`"
+                class="card-slot"
+                :class="{ 'zoomed-on-hover': shiftPressed }"
+                ref="cardSlots"
+                :style="getCardStyle(index)">
                 <div class="card">
                     <component :is="card.type" :data="card" />
                 </div>
@@ -15,7 +29,7 @@
 
 
 <script>
-import draggable from 'vuedraggable';
+import draggable from 'vuedraggable'
 
 import PlayerCard from '@/views/cards/PlayerCard.vue'
 import EventCard from '@/views/cards/EventCard.vue'
@@ -35,18 +49,19 @@ export default {
         },
         type: String,
     },
+    mounted() {
+        window.addEventListener('keydown', this.onKeyDown)
+        window.addEventListener('keyup', this.onKeyUp)
+    },
+    beforeDestroy() {
+        window.removeEventListener('keydown', this.onKeyDown)
+        window.removeEventListener('keyup', this.onKeyUp)
+    },
     data() {
         return {
             localCards: [...this.cards],
-            computedGap: 4
+            shiftPressed: false,
         };
-    },
-    mounted() {
-        this.updateGap()
-        window.addEventListener('resize', this.updateGap)
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.updateGap)
     },
     watch: {
         cards(newVal) {
@@ -54,46 +69,65 @@ export default {
         }
     },
     methods: {
-        emitUpdate() {
+        emitUpdate(evt) {
             this.$emit('update:cards', this.localCards)
         },
         handleMove(evt) {
-            const { from, to, draggedContext, relatedContext } = evt;
+            const { from, to, draggedContext, relatedContext } = evt
 
-            const fromGroup = from?.dataset?.group;
-            const toGroup = to?.dataset?.group;
-            const draggedCard = draggedContext.element;
+            const fromGroup = from?.dataset?.group
+            const toGroup = to?.dataset?.group
+            const draggedCard = draggedContext.element
             if (`deck-${draggedCard.type}` !== toGroup) {
                 return false
             }
 
             return true;
         },
-        updateGap() {
-            this.$nextTick(() => {
-                const zone = this.$refs.dropZone;
-                const cardEls = this.$refs.cardSlots;
+        getCardStyle(index) {
+            const zone = this.$refs.dropZone
+            const cardEls = this.$refs.cardSlots
+            if (!zone || !cardEls?.length) return {}
 
-                if (!zone || !cardEls?.length) return;
+            const zoneWidth = zone.clientWidth
+            const cardWidth = cardEls[0].offsetWidth
+            const cardCount = this.localCards.length
+            const scaledCardWidth = cardWidth * 1
+            const normalGap = 8
 
-                const zoneWidth = zone.clientWidth;
-                const cardWidth = cardEls[0].offsetWidth;
-                const cardCount = this.localCards.length;
+            const totalNormalWidth = cardCount * scaledCardWidth + (cardCount - 1) * normalGap
 
-                const totalCardWidth = cardWidth * cardCount;
-                console.log(zoneWidth,totalCardWidth,cardCount)
-                if (totalCardWidth < zoneWidth) {
-                    this.computedGap = 4
-                } else {
-                    const availableGap = (zoneWidth - totalCardWidth) / (cardCount - 1);
-                    console.log(availableGap)
-                    this.computedGap = availableGap
+            if (totalNormalWidth <= zoneWidth) {
+
+                return {
+                    marginLeft: index === 0 ? '0px' : normalGap + 'px',
+                    zIndex: 1,
                 }
-            });
-        }
+            } else {
+                const overflow = totalNormalWidth - zoneWidth
+                const maxOverlap = cardWidth * 0.7
 
+                let overlapPerGap = overflow / (cardCount - 1)
+                overlapPerGap = Math.min(overlapPerGap, cardWidth)
+
+                const negativeMargin = -overlapPerGap
+                return {
+                    marginLeft: index === 0 ? '0px' : negativeMargin + 'px',
+                    zIndex: index + 10,
+                }
+            }
+        },
+        onDragEnd(evt) {
+
+        },
+        onKeyDown(e) {
+            if (e.key === 'Shift') this.shiftPressed = true
+        },
+        onKeyUp(e) {
+            if (e.key === 'Shift') this.shiftPressed = false
+        }
     }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -107,7 +141,7 @@ export default {
     padding: 1.5rem 1rem;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
     max-height: 10rem;
-    overflow: hidden;
+    overflow: visible;
     transition: max-height 0.3s ease, padding 0.3s ease;
     z-index: 1000;
 
@@ -116,11 +150,11 @@ export default {
         padding: 1rem;
     }
 }
-
 .card-container {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
+    gap: 0;
     transition: gap 0.2s ease;
 }
 
@@ -128,10 +162,17 @@ export default {
     flex-shrink: 0;
     transition: transform 0.2s ease;
     position: relative;
-    transform: scale(.5);
+    transform: scale(.75);
+    &.zoomed-on-hover {
+        &:hover {
+        transform: scale(1.2);
+        z-index: 1000 !important;
+        top: -40px;
+    }
+    }
     &:hover {
-        transform: scale(1.05);
-        z-index: 10;
+        transform: scale(0.8);
+        z-index: 1000 !important;
     }
 }
 </style>

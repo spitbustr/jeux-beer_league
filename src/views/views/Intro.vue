@@ -28,19 +28,6 @@
         <div class="grid-selection">
             <Player v-for="(player,index) in players" :key="`player_${index}`" :player="player"></Player>
         </div> -->
-        <div>
-            <CardDeck
-                :originalDeck="events"
-                type="EventCard"
-                deckName="events"></CardDeck>
-        </div>
-         <div>
-            <CardDeck
-                stacked
-                :originalDeck="players"
-                type="PlayerCard"
-                deckName="players"></CardDeck>
-        </div>
 
         <CardsSlot :cards="cardsInHand" @update:cards="updateCards"></CardsSlot>
     </div>

@@ -15,7 +15,6 @@ export default {
             "images",
         ]),
         teamsList() {
-            console.log(this.teams)
             return this.teams
         }
     },

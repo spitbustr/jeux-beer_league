@@ -108,7 +108,6 @@ export default new Vuex.Store({
       localStorage.setItem(`${STORAGE_KEY}${state.id}`, JSON.stringify(currentGame))
     },
     removeGame({state, dispatch}, gameId) {
-      console.log()
       localStorage.removeItem(`${STORAGE_KEY}${gameId}`)
       dispatch("initializeFindSavedGames")
     },
